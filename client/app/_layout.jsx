@@ -1,20 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { Slot, SplashScreen, Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
 
-export default function App() {
+SplashScreen.preventAutoHideAsync();
+
+const RootLayout = () => {
+  const [fontsLoaded, error] = useFonts({
+    "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
+  });
+  
+  useEffect(() => {
+    if (error) throw error;
+  
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded, error]);
+  
+  if (!fontsLoaded && !error) return null;
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <Stack>
+      <Stack.Screen name='index' options={{ headerShown: false}} />
+    </Stack>
+  )
+};
+
+
+export default RootLayout
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    justifyContent: 'center'
+  }
+})
