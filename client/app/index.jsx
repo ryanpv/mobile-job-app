@@ -5,12 +5,14 @@ import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context'; // no overlap with status bar/bottom bar
 
 import { images } from '../constants';
+import CustomButton from '../components/CustomButton';
+import { Redirect, router } from 'expo-router';
 
 export default function App() {
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView contentContainerStyle={{ height: '100%' }}>
-        <View className='w-full justify-center items-center px-4'> 
+        <View className='w-full justify-center items-center px-4 min-h-[85vh]'> 
         {/* h-full causes view to go to the center of the screen */}
           <Image 
             source={ images.logo }
@@ -39,8 +41,19 @@ export default function App() {
           <Text className='text-sm font-pregular text-gray-100 mt-7 text-center'>Where creativity meets innovation:
             embark on a journey of limitless exploration with Aora
           </Text>
+
+          <CustomButton 
+            title="Continue with Email"
+            handlePress={ () => router.push('/sign-in') }
+            containerStyles='w-full mt-7'
+          />
         </View>
       </ScrollView>
+
+      <StatusBar
+        backgroundColor='#161622'
+        style='light'
+      />
     </SafeAreaView>
     // <View className='flex-1 items-center justify-center bg-white'>
     //   <Text className='text-3xl font-pblack'>Aora!</Text>
