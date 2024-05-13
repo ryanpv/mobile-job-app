@@ -1,19 +1,22 @@
 
 import { StatusBar } from 'expo-status-bar';
 import { Image, ScrollView, Text, View } from 'react-native';
-import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context'; // no overlap with status bar/bottom bar
 
 import { images } from '../constants';
 import CustomButton from '../components/CustomButton';
 import { Redirect, router } from 'expo-router';
+import { useGlobalContext } from '../context/GlobalProvider';
 
 export default function App() {
+  const { isLoading, isLoggedIn } = useGlobalContext();
+
+  if (!isLoading && isLoggedIn) return <Redirect href='/home' />
+  
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView contentContainerStyle={{ height: '100%' }}>
         <View className='w-full justify-center items-center px-4 min-h-[85vh]'> 
-        {/* h-full causes view to go to the center of the screen */}
           <Image 
             source={ images.logo }
             className="w-[130px] h-[84px]"
@@ -44,9 +47,7 @@ export default function App() {
 
           <CustomButton 
             title="Continue with Email"
-            handlePress={ () => {
-              console.log("pressed")
-              router.push('/sign-in')} }
+            handlePress={ () => router.push('/sign-in') }
             containerStyles='w-full mt-7'
           />
         </View>
@@ -57,10 +58,5 @@ export default function App() {
         style='light'
       />
     </SafeAreaView>
-    // <View className='flex-1 items-center justify-center bg-white'>
-    //   <Text className='text-3xl font-pblack'>Aora!</Text>
-    //   <StatusBar style="auto" />
-    //   <Link href="/home" style={{ color: "blue" }}>Go To Home</Link>
-    // </View>
   );
 }
