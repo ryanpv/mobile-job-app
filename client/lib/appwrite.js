@@ -10,6 +10,16 @@ export const appwriteConfig = {
   storageId: '6641238d002808e15e00'
 };
 
+const { 
+  endpoint,
+  platform,
+  projectId,
+  databaseId,
+  userCollectionId,
+  videoCollectionId,
+  storageId
+} = appwriteConfig;
+
 // Init your React Native SDK
 const client = new Client();
 
@@ -62,7 +72,7 @@ export const signIn = async (email, password) => {
 
     return session;
   } catch (error) {
-    // await account.deleteSessions(); // for persistent session during development
+    await account.deleteSessions(); // for persistent session during development
 
     console.log('signIn error: ', error);
     throw new Error(error);
@@ -88,3 +98,17 @@ export const getCurrentUser = async () => {
     console.log('getCurrentUser error: ', error);
   }
 };
+
+
+export const getAllPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      databaseId,
+      videoCollectionId
+    )
+    
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+}

@@ -6,7 +6,7 @@ const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider = ({ children }) => {
-  const [isLoggedIn, setisLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setisLoading] = useState(true);
 
@@ -17,7 +17,7 @@ const GlobalProvider = ({ children }) => {
           setisLoading(true);
           setUser(response);
         } else {
-          setisLoggedIn(false);
+          setIsLoggedIn(false);
           setUser(null);
         }
       })
@@ -33,7 +33,7 @@ const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider
       value={{
         isLoggedIn,
-        setisLoggedIn,
+        setIsLoggedIn,
         user,
         setUser,
         isLoading,
