@@ -37,7 +37,8 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
         <View className='pt-2'>
           <Image source={ icons.menu } className='w-5 h-5' resizeMode='contain' />
         </View>
-  
+      </View>
+
       { play ? (
         <Text className='text-white'>Playing</Text>
       ) : (
@@ -57,12 +58,9 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
             resizeMode='contain'
           />
         </TouchableOpacity>
-      )
-      }
-
-      </View>
+      )}
     </View>
-  )
-}
+  );
+};
 
-export default VideoCard
+export default VideoCard;
