@@ -126,6 +126,7 @@ export const searchPosts = async (query) => {
     throw new Error(error);
   }
 };
+
 export const getLatestPosts = async () => {
   try {
     const posts = await databases.listDocuments(
@@ -135,6 +136,30 @@ export const getLatestPosts = async () => {
     )
     
     return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getUserPosts = async (userId) => {
+  try {
+    const posts = await databases.listDocuments(
+      databaseId,
+      videoCollectionId,
+      [Query.equal('creator', userId)]
+    )
+    
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession('current');
+
+    return session;
   } catch (error) {
     throw new Error(error);
   }
