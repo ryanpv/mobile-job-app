@@ -6,13 +6,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '../../components/FormField';
 import { ResizeMode, Video } from 'expo-av';
 import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 
 
 import { icons } from '../../constants';
 import CustomButton from '../../components/CustomButton';
+import { createVideo } from '../../lib/appwrite';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const Create = () => {
+  const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -22,8 +26,13 @@ const Create = () => {
   });
 
   const openPicker = async (selectType) => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: selectType === 'image' ? ['image/png', 'image/jpg'] : ['video/mp4', 'video/gif']
+    // const result = await DocumentPicker.getDocumentAsync({
+    //   type: selectType === 'image' ? ['image/png', 'image/jpg', 'image/jpeg'] : ['video/mp4', 'video/gif']
+    // });
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
+      aspect: [4, 3],
+      quality: 1
     });
 
     if (!result.canceled) {
@@ -34,14 +43,15 @@ const Create = () => {
       if (selectType === 'video') {
         setForm({ ...form, video: result.assets[0] })
       }
-    } else {
-      setTimeout(() => {
-        Alert.alert('Document picked', JSON.stringify(result, null, 2))
-      }, 100);
-    }
+    } 
+    // else {
+    //   setTimeout(() => {
+    //     Alert.alert('Document picked', JSON.stringify(result, null, 2))
+    //   }, 100);
+    // }
   };
 
-  const submit = () => {
+  const submit = async() => {
     if (!form.prompt || !form.thumbnail || !form.title || !form.video) {
       return Alert.alert('Please fill in all the fields')
     }
@@ -49,6 +59,10 @@ const Create = () => {
     setUploading(true);
 
     try {
+      await createVideo({
+        ...form, userId: user.$id
+      });
+
       Alert.alert('Success', 'Post uploaded successfully');
       router.push('/home');
     } catch (error) {
@@ -94,9 +108,7 @@ const Create = () => {
             <Video 
               source={{ uri: form.video.uri }}
               className='w-full h-64 rounded-2xl'
-              useNativeControls
               resizeMode={ ResizeMode.COVER }
-              isLooping
             />
           ) : (
             <View className='w-full h-40 bg-black-100 px-4 rounded-2xl justify-center items-center'>
@@ -141,7 +153,7 @@ const Create = () => {
         </View>
 
         <FormField
-          title='AI Promppt'
+          title='AI Prompt'
           value={ form.prompt }
           placeholder='The prompt you used to create this video'
           handleChangeText={ (e) => setForm({ ...form, 
