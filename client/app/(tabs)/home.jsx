@@ -27,7 +27,7 @@ console.log('home page refreshing');
     setRefreshing(false);
   };
 
-  // console.log('posts', posts[0].title)
+  console.log('posts', posts)
 
   return (
     <SafeAreaView className='bg-primary h-full'>

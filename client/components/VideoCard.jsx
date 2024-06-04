@@ -12,7 +12,7 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
       <View className='flex flex-row gap-3 items-start'>
         <View className='flex justify-center items-center flex-row flex-1'>
           <View className='w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5'>
-            <Image source={{ uri: avatar }} 
+            <Image source={{ uri: avatar ? avatar : null }} 
               className='w-full h-full rounded-lg'
               resizeMode='cover'
             />
@@ -31,19 +31,24 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
             <Text className='text-xs text-gray-100 font-pregular'
               numberOfLines={1}
             >
-              { username }
+              { username ? username : "No user" }
             </Text>
           </View>
         </View>
 
+
         <View className='pt-2'>
+        <TouchableOpacity
+          onPress={ () => console.log("pressed menu") }
+        >
           <Image source={ icons.menu } className='w-5 h-5' resizeMode='contain' />
+        </TouchableOpacity>
         </View>
       </View>
 
       { play ? (
         <Video 
-          source={{ uri: video }}
+          source={{ uri: video ? video : null }}
           className='w-full h-60 rounded-xl'
           resizeMode={ ResizeMode.CONTAIN }
           useNativeControls
@@ -61,7 +66,7 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
           className='w-full h-60 rounded-xl mt-3 relative flex justify-center items-center'
         >
           <Image
-            source={{ uri: thumbnail }} 
+            source={{ uri: thumbnail ? thumbnail : null }} 
             className='w-full h-full rounded-xl mt-3'
             resizeMode='cover'
           />
